@@ -1,3 +1,12 @@
+// time function
+function timeFormat(time){
+    const hour=parseInt(time/3600);
+    let remaining=time%3600;
+    const minute=parseInt(remaining/60)
+    remaining=remaining%60;
+    return `${hour} hour ${minute} minute ${remaining} second`
+}
+
 // button
 const loadCategories = async () => {
   try {
@@ -64,7 +73,14 @@ const displayVideos = (videos) => {
     class="h-full w-full object-cover"
       src=${video.thumbnail}
       alt="Shoes" />
-      <span class="absolute bottom-2 right-3 p-2 bg-black text-white rounded-lg">${video.others.posted_date}</span>
+      ${
+        video.others.posted_date?.length == 0
+          ? ""
+          : `<span class="absolute bottom-2 right-3 p-2 bg-black text-white rounded-lg text-xs">${timeFormat(
+              video.others.posted_date
+            )}</span>`
+      }
+      
   </figure>
   <div class="py-2 flex gap-2">
     <div>
@@ -74,11 +90,14 @@ const displayVideos = (videos) => {
       alt="Shoes" />    
       </div>
     <div>
-    <h2>${video.title}</h2>
+    <h2 class="font-bold text-base">${video.title}</h2>
 <div class="flex items-center gap-1">
     <p>${video.authors[0].profile_name}</p>
-    ${video.authors[0].verified===true ? `<img src="https://img.icons8.com/?size=48&id=D9RtvkuOe31p&format=png" class="w-5 h-5"/>` : ""
-}
+    ${
+      video.authors[0].verified === true
+        ? `<img src="https://img.icons8.com/?size=48&id=D9RtvkuOe31p&format=png" class="w-5 h-5"/>`
+        : ""
+    }
 <div/>
     <p></p>
     </div>
