@@ -6,7 +6,15 @@ function timeFormat(time){
     remaining=remaining%3600;
     const minute=parseInt(remaining/60)
     remaining=remaining%60;
-    return `${day} day ${hour} hour ${minute} minute ${remaining} second ago`
+    return `${day} day ${hour} hr ${minute} min ${remaining} sec ago`
+}
+
+// remove class 
+const removeClass=()=>{
+  const buttons = document.getElementsByClassName("active-btn");
+  for(const button of buttons){
+    button.classList.remove("active")
+  }
 }
 
 // button
@@ -28,6 +36,10 @@ const loadCategoriesVideo=async(id)=>{
       `https://openapi.programming-hero.com/api/phero-tube/category/${id}`
     );
     const data = await res.json();
+    removeClass();
+    const activebtn=document.getElementById(`${id}`)
+    activebtn.classList.add("active")
+    console.log(activebtn,id);
     displayVideos(data.category);
   } catch (err) {
     console.log("ERROR:", err);
@@ -39,7 +51,7 @@ const displayCategories = (categories) => {
   categories.forEach((categories) => {
     const buttonContainer = document.createElement("div");
     buttonContainer.innerHTML = `
-    <button onclick="loadCategoriesVideo(${categories.category_id})" class="btn">${categories.category}</button>
+    <button id="${categories.category_id}" onclick="loadCategoriesVideo(${categories.category_id})" class="btn active-btn">${categories.category}</button>
     `;
     categoriesContainer.appendChild(buttonContainer);
   });
@@ -79,6 +91,17 @@ const loadVideos = async () => {
 const displayVideos = (videos) => {
   const videoContainer = document.getElementById("videos");
   videoContainer.innerHTML="";
+  if(videos.length==0){
+    videoContainer.classList.remove("grid");
+    videoContainer.innerHTML=`
+    <div class="flex flex-col min-h-screen w-full items-center mt-32 gap-5">
+    <img src="./assets/icon.png"/>
+    <h2 class="text-center text-xl font-bold">No content here in this category</h2>
+    </div>
+    `;
+  }else{
+    videoContainer.classList.add("grid");
+  }
   videos.forEach((video) => {
     console.log(video);
     const card = document.createElement("div");
