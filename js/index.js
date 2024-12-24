@@ -1,10 +1,12 @@
 // time function
 function timeFormat(time){
+    const day = parseInt(time/86400);
+    let remaining = time%86400;
     const hour=parseInt(time/3600);
-    let remaining=time%3600;
+    remaining=remaining%3600;
     const minute=parseInt(remaining/60)
     remaining=remaining%60;
-    return `${hour} hour ${minute} minute ${remaining} second`
+    return `${day} day ${hour} hour ${minute} minute ${remaining} second ago`
 }
 
 // button
@@ -20,13 +22,26 @@ const loadCategories = async () => {
   }
 };
 
+const loadCategoriesVideo=async(id)=>{
+  try {
+    const res = await fetch(
+      `https://openapi.programming-hero.com/api/phero-tube/category/${id}`
+    );
+    const data = await res.json();
+    displayVideos(data.category);
+  } catch (err) {
+    console.log("ERROR:", err);
+  }
+}
+
 const displayCategories = (categories) => {
   const categoriesContainer = document.getElementById("categories");
   categories.forEach((categories) => {
-    const button = document.createElement("button");
-    button.classList = "btn";
-    button.innerText = categories.category;
-    categoriesContainer.appendChild(button);
+    const buttonContainer = document.createElement("div");
+    buttonContainer.innerHTML = `
+    <button onclick="loadCategoriesVideo(${categories.category_id})" class="btn">${categories.category}</button>
+    `;
+    categoriesContainer.appendChild(buttonContainer);
   });
 };
 
@@ -63,6 +78,7 @@ const loadVideos = async () => {
 // }
 const displayVideos = (videos) => {
   const videoContainer = document.getElementById("videos");
+  videoContainer.innerHTML="";
   videos.forEach((video) => {
     console.log(video);
     const card = document.createElement("div");
@@ -76,7 +92,7 @@ const displayVideos = (videos) => {
       ${
         video.others.posted_date?.length == 0
           ? ""
-          : `<span class="absolute bottom-2 right-3 p-2 bg-black text-white rounded-lg text-xs">${timeFormat(
+          : `<span class="absolute bottom-2 right-3 p-2 bg-black text-white rounded-lg text-[8px] lg:text-[10px]">${timeFormat(
               video.others.posted_date
             )}</span>`
       }
