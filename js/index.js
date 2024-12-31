@@ -116,9 +116,9 @@ const displayVideos = (videos) => {
   videoContainer.innerHTML="";
   if(videos.length==0){
     videoContainer.classList.remove("grid");
-    videoContainer.innerHTML=`
+    videoContainer.innerHTML = `
     <div class="flex flex-col min-h-screen w-full items-center mt-32 gap-5">
-    <img src="./assets/Icon.png"/>
+    <img src="../assets/Icon.png"/>
     <h2 class="text-center text-xl font-bold">No content here in this category</h2>
     </div>
     `;
