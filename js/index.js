@@ -81,10 +81,10 @@ const displayCategories = (categories) => {
 };
 
 // videos
-const loadVideos = async () => {
+const loadVideos = async (searchText = "") => {
   try {
     const res = await fetch(
-      "https://openapi.programming-hero.com/api/phero-tube/videos"
+      `https://openapi.programming-hero.com/api/phero-tube/videos?title=${searchText}`
     );
     const data = await res.json();
     displayVideos(data.videos);
@@ -168,6 +168,10 @@ const displayVideos = (videos) => {
     videoContainer.appendChild(card);
   });
 };
+
+document.getElementById("search-input").addEventListener("keyup",(e)=>{
+ loadVideos(e.target.value);
+});
 
 loadCategories();
 loadVideos();
