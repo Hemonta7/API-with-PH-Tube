@@ -17,6 +17,29 @@ const removeClass=()=>{
   }
 }
 
+// load details
+const loadDetails= async(videoId)=>{
+try {
+  const res = await fetch(
+    `https://openapi.programming-hero.com/api/phero-tube/video/${videoId}`
+  );
+  const data = await res.json();
+  displayDetails(data.video);
+} catch (err) {
+  console.log("ERROR:", err);
+}
+}
+
+const displayDetails=(video)=>{
+console.log(video)
+const detailsContainer = document.getElementById("modal-content");
+detailsContainer.innerHTML = `
+<img src=${video.thumbnail} />
+<p>${video.description}</p>                       
+`;
+document.getElementById("customModal").showModal();
+}
+
 // button
 const loadCategories = async () => {
   try {
@@ -138,9 +161,9 @@ const displayVideos = (videos) => {
         : ""
     }
 <div/>
-    <p></p>
-    </div>
-  </div>
+</div>
+</div>
+<p><button onclick="loadDetails('${video.video_id}')" class="btn btn-sm bg-[#FF1F3D] text-white">Details</button></p>
         `;
     videoContainer.appendChild(card);
   });
